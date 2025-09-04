@@ -9,9 +9,9 @@
 <img width="805" height="599" alt="image" src="https://github.com/user-attachments/assets/a35ea2a1-5f76-45e8-aa14-d86e15b97ca7" />
 
 ### 1. Nginx 
-* HTTPS : 로컬에서 또한 Https 적용하여 보기 
+* HTTPS : 로컬에서 또한 Https 적용
 * API Rate Limit : 어플리케이션 레이어에 들어가기 이전 부터, API에 대한 Rate Limit 정책을 걸어 DB/Server에 대한 과부하 사전 방어 
-* Server Health Check : Server 중 장애가 있을 경우, Nginx 레이어에서 알아서 넘어감
+* Server Health Check : Server 중 장애가 있을 경우, Nginx 레이어에서 인식 
 * Load Balance : Least Connection 정책을 따라 Server에 로드 벨런싱을 시도함
 
 ### 2. Spring Boot Server
