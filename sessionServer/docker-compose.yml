@@ -1,0 +1,197 @@
+services:
+  # Valkey Session Server - Primary (Read-Write)
+  valkey-session-primary:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-session-primary
+    hostname: valkey-session-primary
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./config/valkey-primary.conf:/usr/local/etc/valkey/valkey.conf
+      - valkey-session-primary-data:/data
+    command: valkey-server /usr/local/etc/valkey/valkey.conf
+    networks:
+      - default
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Session Server - Replica 1 (Read-Only)
+  valkey-session-replica1:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-session-replica1
+    hostname: valkey-session-replica1
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./config/valkey-replica1.conf:/usr/local/etc/valkey/valkey.conf
+      - valkey-session-replica1-data:/data
+    command: valkey-server /usr/local/etc/valkey/valkey.conf
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Session Server - Replica 2 (Read-Only)
+  valkey-session-replica2:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-session-replica2
+    hostname: valkey-session-replica2
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./config/valkey-replica2.conf:/usr/local/etc/valkey/valkey.conf
+      - valkey-session-replica2-data:/data
+    command: valkey-server /usr/local/etc/valkey/valkey.conf
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Sentinel 1
+  valkey-sentinel1:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-sentinel1
+    hostname: valkey-sentinel1
+    ports:
+      - "26379:26379"
+    volumes:
+      - ./config/sentinel1.conf:/usr/local/etc/valkey/sentinel.conf
+      - ./wait-for-valkey.sh:/wait-for-valkey.sh
+    command: sh -c "chmod +x /wait-for-valkey.sh && /wait-for-valkey.sh"
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+      - valkey-session-replica1
+      - valkey-session-replica2
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-p", "26379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Sentinel 2
+  valkey-sentinel2:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-sentinel2
+    hostname: valkey-sentinel2
+    ports:
+      - "26380:26379"
+    volumes:
+      - ./config/sentinel2.conf:/usr/local/etc/valkey/sentinel.conf
+      - ./wait-for-valkey.sh:/wait-for-valkey.sh
+    command: sh -c "chmod +x /wait-for-valkey.sh && /wait-for-valkey.sh"
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+      - valkey-session-replica1
+      - valkey-session-replica2
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-p", "26379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Sentinel 3
+  valkey-sentinel3:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-sentinel3
+    hostname: valkey-sentinel3
+    ports:
+      - "26381:26379"
+    volumes:
+      - ./config/sentinel3.conf:/usr/local/etc/valkey/sentinel.conf
+      - ./wait-for-valkey.sh:/wait-for-valkey.sh
+    command: sh -c "chmod +x /wait-for-valkey.sh && /wait-for-valkey.sh"
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+      - valkey-session-replica1
+      - valkey-session-replica2
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-p", "26379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Sentinel 4
+  valkey-sentinel4:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-sentinel4
+    hostname: valkey-sentinel4
+    ports:
+      - "26382:26379"
+    volumes:
+      - ./config/sentinel4.conf:/usr/local/etc/valkey/sentinel.conf
+      - ./wait-for-valkey.sh:/wait-for-valkey.sh
+    command: sh -c "chmod +x /wait-for-valkey.sh && /wait-for-valkey.sh"
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+      - valkey-session-replica1
+      - valkey-session-replica2
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-p", "26379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Valkey Sentinel 5
+  valkey-sentinel5:
+    image: valkey/valkey:7.2.5-alpine
+    container_name: valkey-sentinel5
+    hostname: valkey-sentinel5
+    ports:
+      - "26383:26379"
+    volumes:
+      - ./config/sentinel5.conf:/usr/local/etc/valkey/sentinel.conf
+      - ./wait-for-valkey.sh:/wait-for-valkey.sh
+    command: sh -c "chmod +x /wait-for-valkey.sh && /wait-for-valkey.sh"
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - valkey-session-primary
+      - valkey-session-replica1
+      - valkey-session-replica2
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-p", "26379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  valkey-session-primary-data:
+    driver: local
+  valkey-session-replica1-data:
+    driver: local
+  valkey-session-replica2-data:
+    driver: local
+
+networks:
+  default:
+    name: incident-net
+    external: true
