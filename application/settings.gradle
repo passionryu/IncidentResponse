@@ -1,0 +1,5 @@
+rootProject.name = 'incident_response'
+include('application')
+project(':application').projectDir = file('application')
+
+

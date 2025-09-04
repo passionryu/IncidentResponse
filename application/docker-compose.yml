@@ -1,7 +1,8 @@
 services:
   server1:
     build:
-      context: .
+      context: .               # application 디렉토리
+      dockerfile: Dockerfile
     image: application-server1  # 공통 이미지 사용
     container_name: server1
     environment:
@@ -13,7 +14,8 @@ services:
 
   server2:
     build:
-      context: .
+      context: .               # application 디렉토리
+      dockerfile: Dockerfile
     image: application-server1  # 공통 이미지 사용
     container_name: server2
     environment:
@@ -25,7 +27,8 @@ services:
 
   server3:
     build:
-      context: .
+      context: .               # application 디렉토리
+      dockerfile: Dockerfile
     image: application-server1  # 공통 이미지 사용
     container_name: server3
     environment:
