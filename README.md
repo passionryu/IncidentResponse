@@ -1,3 +1,6 @@
+### 연구 기록 페이지 (Notion)
+https://knotty-toast-80a.notion.site/26b1979809dd800681eff595e8dbe3bd?source=copy_link
+
 ### Project Missions
 * 개발자의 개입 없는 자동 장애 대응 시스템 구축 
 * 하나의 인스턴스가 장애가 발생해도 유저에게 지장 없는 고가용성 확보 
