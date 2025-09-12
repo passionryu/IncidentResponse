@@ -1,8 +1,11 @@
 package dev.incident_response.web;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.InetAddress;
 import java.time.ZonedDateTime;
@@ -24,6 +27,20 @@ public class HomeController {
         model.addAttribute("instance", instance);
         model.addAttribute("time", ZonedDateTime.now().toString());
         return "index";
+    }
+
+    @GetMapping("/session")
+    @ResponseBody
+    public String sessionInfo(HttpSession session) {
+        Object val = session.getAttribute("demo");
+        return "sessionId=" + session.getId() + ", demo=" + (val == null ? "null" : val.toString());
+    }
+
+    @PostMapping("/session")
+    @ResponseBody
+    public String setSession(HttpSession session) {
+        session.setAttribute("demo", "hello");
+        return "OK:" + session.getId();
     }
 }
 
