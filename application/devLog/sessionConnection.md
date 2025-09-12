@@ -81,50 +81,8 @@ sessionId=<same-session-id>, demo=hello
 
 ## 동작 방식 시각화
 
-### 1) 요청 흐름 시퀀스 다이어그램
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User as Client
-    participant N as Nginx (LB)
-    participant S1 as Spring server1
-    participant S2 as Spring server2
-    box Valkey Cluster
-      participant SEN as Sentinel(5)
-      participant M as Valkey Master
-      participant R1 as Replica1
-      participant R2 as Replica2
-    end
 
-    User->>N: HTTP POST /session
-    N->>S1: 라우팅 (least_conn)
-    S1->>SEN: master 주소 질의 (get-master-addr-by-name)
-    SEN-->>S1: master=172.18.0.5:6379
-    S1->>M: SET spring:session:... (demo=hello)
-    M-->>S1: OK (복제 backlog 기록)
-    M-->>R1: 복제 전파 (async)
-    M-->>R2: 복제 전파 (async)
-    S1-->>User: OK: <sessionId>
-
-    User->>N: HTTP GET /session (동일 쿠키)
-    alt 서버1 바쁨
-      N->>S2: 라우팅 (least_conn)
-      S2->>SEN: master 주소 질의
-      SEN-->>S2: master=172.18.0.5:6379
-      S2->>M: GET spring:session:... (demo)
-      M-->>S2: demo=hello
-      S2-->>User: sessionId=<same>, demo=hello
-    else 서버1로 라우팅
-      N->>S1: 라우팅
-      S1->>M: GET spring:session:...
-      M-->>S1: demo=hello
-      S1-->>User: sessionId=<same>, demo=hello
-    end
-
-    note over SEN,M,R1,R2: Sentinel가 Master 헬스 체크 및 페일오버를 관리
-```
-
-### 2) 아키텍처 개요 다이어그램
+### 1) 아키텍처 개요 다이어그램
 ```mermaid
 graph LR
   subgraph Client
