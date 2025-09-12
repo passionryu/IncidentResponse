@@ -25,18 +25,18 @@ services:
     expose:
       - "8080"
 
-  server3:
-    build:
-      context: .               # application 디렉토리
-      dockerfile: Dockerfile
-    image: application-server1  # 공통 이미지 사용
-    container_name: server3
-    environment:
-      - APP_INSTANCE=server3
-      - SERVER_PORT=8080
-      - JAVA_OPTS=-Xmx256m -Xms128m
-    expose:
-      - "8080"
+#  server3:
+#    build:
+#      context: .               # application 디렉토리
+#      dockerfile: Dockerfile
+#    image: application-server1  # 공통 이미지 사용
+#    container_name: server3
+#    environment:
+#      - APP_INSTANCE=server3
+#      - SERVER_PORT=8080
+#      - JAVA_OPTS=-Xmx256m -Xms128m
+#    expose:
+#      - "8080"
 
   nginx:
     image: nginx:1.27-alpine
@@ -44,7 +44,7 @@ services:
     depends_on:
       - server1
       - server2
-      - server3
+#      - server3
     ports:
       - "8080:80"
     volumes:
